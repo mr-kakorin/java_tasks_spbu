@@ -14,9 +14,9 @@ public class JavaFromZip {
         File zipFile = new File(fileName);
 
         String absath = zipFile.getAbsolutePath();
-        String folder_path = absath.substring(0,absath.lastIndexOf(File.separator));
+        String folderPath = absath.substring(0,absath.lastIndexOf(File.separator));
 
-        ZipUtils.extract(zipFile, new File(folder_path));
+        ZipUtils.extract(zipFile, new File(folderPath));
     }
 
     static List<Path> getFiles(String fileName) throws IOException {
