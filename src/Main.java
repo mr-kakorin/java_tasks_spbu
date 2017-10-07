@@ -89,16 +89,20 @@ public class Main {
         Stream zippedStream = StreamZipper.zip(firstStream, secondStream);
         zippedStream.forEach(System.out::println);
     }
-
+    private static void Task10(String matchString){
+        PalindromeDetector pd = new PalindromeDetector();
+        pd.detect(matchString);
+    }
     public static void main(String[] args) {
-        Task1(8, 13);
-        Task2(args[0], args[1]);
-        Task3("asfasxz");
-        Task4(new Scanner(System.in));
-        Task5(System.getProperty("prop.test") + "\\task5.zip");
-        Task6(System.getProperty("prop.test") + "\\task6.txt", args[0].charAt(0));
-        Task7(System.getProperty("prop.test") + "\\task7.txt", 5);
-        Task8(128L, 25214903917L, 11L, 2^48L, 12);
-        Task9(Stream.of(1, 3, 5, 7, 9, 11), Stream.of(2, 4, 6, 8, 10, 12));
+//        Task1(8, 13);
+//        Task2(args[0], args[1]);
+//        Task3("asfasxz");
+//        Task4(new Scanner(System.in));
+//        Task5(System.getProperty("prop.test") + "\\task5.zip");
+//        Task6(System.getProperty("prop.test") + "\\task6.txt", args[0].charAt(0));
+//        Task7(System.getProperty("prop.test") + "\\task7.txt", 5);
+//        Task8(128L, 25214903917L, 11L, 2^48L, 12);
+//        Task9(Stream.of(1, 3, 5, 7, 9, 11), Stream.of(2, 4, 6, 8, 10, 12));
+          Task10("aabaacaabaa");
     }
 }
