@@ -10,9 +10,11 @@ import java.util.stream.Stream;
  * Class that unzips a file and then finds every .java file that contains "transient" or "volatile"
  */
 public class JavaFromZip {
+    private static firstPattern = "pattern1";
+    private static secondPattern = "pattern2";
     private static void unzip(String fileName){
         File zipFile = new File(fileName);
-
+        
         String absath = zipFile.getAbsolutePath();
         String folderPath = absath.substring(0,absath.lastIndexOf(File.separator));
 
@@ -28,7 +30,19 @@ public class JavaFromZip {
         Stream<Path> fileStream = Files.walk(path).filter(x -> x.toString().endsWith(".java"));
 
         //iterate through java files
-        fileStream.forEach(file -> result.add(file));
+        fileStream.forEach(file -> {
+            try{
+                //get stream of all lines of the  file 
+                Stream<String> fileLinesStream = Files.lines(file); 
+                if (fileLinesStream.anyMatch(line -> line.contains(firstPattern) || line.contains(secondPattern))) {
+                    result.add(file);
+                }
+            } 
+            catch (IOException e){
+                e.printStackTrace();
+            }
+
+        });
         return result;
     }
 }
