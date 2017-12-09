@@ -1,46 +1,47 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
+class Alternator implements Iterator{
 
-class Zipped<T> implements Stream.Builder<T>{
+    private Iterator fIterator;
+    private Iterator sIterator;
+    private boolean fromFirst;
+    private boolean hasNext;
 
-    private List<T> container = null;
-
-    public Stream<T> build(){
-        return container.stream();
+    Alternator(Iterator fIterator, Iterator sIterator) {
+        this.fIterator = fIterator;
+        this.sIterator = sIterator;
+        fromFirst = true;
+        hasNext = true;
     }
 
-    public void accept(T obj){
-        if(container == null){
-            container = new ArrayList<T>();
+    @Override
+    public boolean hasNext() {
+        if (hasNext) {
+            if (fIterator.hasNext() != sIterator.hasNext()) hasNext = false;
+            return true;
+        } else {
+            return false;
         }
-        if (obj!= null)
-            container.add(obj);
     }
 
-    public Stream.Builder<T> add (T obj){
-        accept(obj);
-        return this;
+    @Override
+    public Object next() {
+        Object result = (fromFirst)? fIterator.next() : sIterator.next();
+        fromFirst = !fromFirst;
+        return result;
     }
+
 }
-
-/**
- * Class to merge two input streams into one stream that alternates their elements
- */
 
 public class StreamZipper {
 
     public static Stream zip(Stream fStream, Stream sStream){
-        Zipped<Object> zipped = new Zipped<Object>();
-        Object[] fList= fStream.toArray();
-        Object[] sList = sStream.toArray();
-        int length = Math.min(fList.length, sList.length);
-        for (int i = 0; i < length; ++i){
-            zipped.add(fList[i]);
-            zipped.add(sList[i]);
-        }
-        return zipped.build();
+        Alternator alter = new Alternator(fStream.iterator(), sStream.iterator());
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(alter, Spliterator.ORDERED), false);
     }
 }
 
